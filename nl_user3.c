@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 /* Protocol family, consistent in both kernel prog and user prog. */
-#define NETLINK_TEST 31
+#define MYPROTO NETLINK_USERSOCK
 /* Multicast group, consistent in both kernel prog and user prog. */
 #define GROUP_ID 17
 
@@ -16,7 +16,7 @@ int open_netlink(void)
     struct sockaddr_nl addr;
     int group = GROUP_ID;
 
-    sock = socket(AF_NETLINK, SOCK_RAW, NETLINK_TEST);
+    sock = socket(AF_NETLINK, SOCK_RAW, MYPROTO);
     if (sock < 0) {
         printf("sock < 0.\n");
         return sock;

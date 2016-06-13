@@ -6,7 +6,7 @@
 #include <sys/socket.h>
 
 # define MAX_PAYLOAD 2048
-#define NETLINK_TEST 31
+#define MYPROTO NETLINK_USERSOCK
 #define GROUP_ID 17
 
 struct nlmsghdr *nlh;
@@ -16,7 +16,7 @@ int open_socket(void)
 {
 	int user_sock;
 
-	user_sock = socket(PF_NETLINK, SOCK_RAW, NETLINK_TEST);
+	user_sock = socket(PF_NETLINK, SOCK_RAW, MYPROTO);
 	if (user_sock < 0) {
         printf("sock < 0.\n");
         return user_sock;
