@@ -6,6 +6,8 @@
 
 #define NETLINK_TEST 31
 
+#define GROUP_ID 17
+
 struct sock *nl_sk = NULL;
 
 static void hello_nl_recv_msg(struct sk_buff *skb) {
