@@ -8,6 +8,8 @@
 
 # define MAX_PAYLOAD 2048
 #define NETLINK_TEST 31
+#define GROUP_ID 17
+
 
 struct sockaddr_nl src_addr, dest_addr;
 struct msghdr msg;
@@ -20,6 +22,7 @@ int main()
 	user_sock = socket(PF_NETLINK, SOCK_RAW, NETLINK_TEST);
 	memset(&src_addr, 0, sizeof(src_addr));
 	src_addr.nl_family = AF_NETLINK;
+	
 	bind(user_sock, (struct sockaddr*)&src_addr,sizeof(src_addr));
 
 memset(&dest_addr, 0, sizeof(dest_addr));
