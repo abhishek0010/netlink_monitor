@@ -1,15 +1,17 @@
 #include <linux/module.h>
+#include <linux/kernel.h>
 #include <net/sock.h>
+#include <net/netlink.h>
 #include <linux/netlink.h>
-#include <linux/skbuff.h>
+//#include <linux/skbuff.h>
 #include <net/net_namespace.h> //new here
 
 
 #define MYPROTO NETLINK_USERSOCK
 
-#define GROUP_ID 17
+#define GROUP_ID 31
 
-struct sock *nl_sk = NULL;
+static struct sock *nl_sk = NULL;
 
 static void hello_nl_recv_msg(void) 
 {
@@ -20,25 +22,30 @@ static void hello_nl_recv_msg(void)
 	char *msg="Hello from kernel";
 	int msg_size = strlen(msg) + 1;
 	int res;
+
 	printk(KERN_INFO "Entering: %s\n", __FUNCTION__);
 	//nlh=(struct nlmsghdr*)skb->data;
 	//printk(KERN_INFO "Netlink received msg payload:%s\n",(char*)nlmsg_data(nlh));
 	//pid = nlh->nlmsg_pid; /*pid of sending process */
-	skb = nlmsg_new(NLMSG_ALIGN(msg_size + 1),GFP_KERNEL);//changed 0 to GPF_KERNEL
+	skb = nlmsg_new(NLMSG_ALIGN(msg_size + 1), GFP_KERNEL);//changed 0 to GPF_KERNEL
 	if(!skb)
 	{
 		printk(KERN_ERR "Failed to allocate new skb\n");
 		return;
 	} 
-	nlh=nlmsg_put(skb,0,1,NLMSG_DONE,msg_size+1,0);
-	strncpy(nlmsg_data(nlh),msg, msg_size + 1); 
+
+	nlh = nlmsg_put(skb, 0, 1, NLMSG_DONE, msg_size + 1, 0);
+	strcpy(nlmsg_data(nlh),msg); 
 	//NETLINK_CB(skb_out).dst_group = 0; /* not in mcast group */ 
 	printk(KERN_INFO "Sending msg now.....");
 	res = nlmsg_multicast(nl_sk, skb, 0, GROUP_ID, GFP_KERNEL); //added this line for making msg multicast
+	//but its not working either
 	//res=nlmsg_unicast(nl_sk,skb_out,pid);
 
 	if(res<0)
     	printk(KERN_INFO "Error while sending bak to user\n");
+    else 
+    	printk(KERN_INFO "Successful Delivery\n");
 }
 
 static int __init hello_init(void)
@@ -56,13 +63,14 @@ static int __init hello_init(void)
     	return -10;
 	}
 	hello_nl_recv_msg();
+	netlink_kernel_release(nl_sk);
 	return 0;
 }
 
 static void __exit hello_exit(void) {
 
 printk(KERN_INFO "exiting hello module\n");
-netlink_kernel_release(nl_sk);
+
 }
 
 module_init(hello_init); 

@@ -26,7 +26,7 @@ int open_netlink(void)
     addr.nl_family = AF_NETLINK;
     addr.nl_pid = getpid();
     /* This doesn't work for some reason. See the setsockopt() below. */
-    /* addr.nl_groups = GROUP_ID; */
+    //addr.nl_groups = GROUP_ID;
 
     if (bind(sock, (struct sockaddr *) &addr, sizeof(addr)) < 0) {
         printf("bind < 0.\n");
