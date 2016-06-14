@@ -28,18 +28,19 @@ int open_socket(void)
 	src_addr.nl_family = AF_NETLINK;
 	src_addr.nl_pid = getpid();
 	/* addr.nl_groups = MYMGRP; This is not working*/
+	src_addr.nl_groups = GROUP_ID;
 	if(bind(user_sock, (struct sockaddr*)&src_addr,sizeof(src_addr)))
 	{
 		printf("Bind < 0\n");
 		return -1;
 	}
 
-	int grp = GROUP_ID;
+	/*int grp = GROUP_ID;
 	//this may be the option to use 
 	if (setsockopt(user_sock, 270, NETLINK_ADD_MEMBERSHIP, &grp, sizeof(grp)) < 0) {
         printf("setsockopt < 0\n");
         return -1;
-    }
+    }*/
 
 }
 

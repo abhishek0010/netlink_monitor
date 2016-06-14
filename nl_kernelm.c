@@ -39,7 +39,7 @@ static void hello_nl_recv_msg(void)
 	//NETLINK_CB(skb_out).dst_group = 0; /* not in mcast group */ 
 	printk(KERN_INFO "Sending msg now.....");
 	res = nlmsg_multicast(nl_sk, skb, 0, GROUP_ID, GFP_KERNEL); //added this line for making msg multicast
-	//but its not working either
+	//working for ports created with python scripts
 	//res=nlmsg_unicast(nl_sk,skb_out,pid);
 
 	if(res<0)

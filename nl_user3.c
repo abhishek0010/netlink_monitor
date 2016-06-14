@@ -8,7 +8,7 @@
 /* Protocol family, consistent in both kernel prog and user prog. */
 #define MYPROTO NETLINK_USERSOCK
 /* Multicast group, consistent in both kernel prog and user prog. */
-#define GROUP_ID 17
+#define GROUP_ID 31
 
 int open_netlink(void)
 {
